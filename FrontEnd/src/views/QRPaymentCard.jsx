@@ -7,11 +7,10 @@ import { checkSalePayment } from "@/api/saleAction";
 import { toast } from "sonner";
 
 const QRPaymentCard = ({ payment, onClose, onRegenerate, onPaid }) => {
-  // Remaining time for QR expiration in milliseconds
   const [remainingTime, setRemainingTime] = useState(
     payment.expiration - Date.now()
   );
-  const [isPaid, setIsPaid] = useState(payment.paid); // keep as Boolean
+  const [isPaid, setIsPaid] = useState(payment.paid);
   const [hasExpiredToast, setHasExpiredToast] = useState(false);
 
   // Countdown timer for QR expiration
