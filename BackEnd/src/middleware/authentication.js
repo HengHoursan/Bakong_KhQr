@@ -19,8 +19,6 @@ const verifyToken = (req, res, next) => {
   //   return res.status(403).json({ message: "Invalid token." });
   // }
   const token = req.cookies.accessToken;
-  console.log("Token from cookie:", token);
-
   if (!token) {
     return res
       .status(401)

@@ -62,8 +62,6 @@ exports.createSale = async (req, res) => {
       "BATTAMBANG",
       optionalData
     );
-    console.log("Populated Items:", populatedItems);
-    console.log("Total Price:", totalPrice);
     const khqr = new BakongKHQR();
     const qrData = khqr.generateIndividual(individualInfo);
     console.log("Generated KHQR:", qrData);
