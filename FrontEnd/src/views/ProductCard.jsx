@@ -37,7 +37,6 @@ const ProductCard = () => {
 
   const handleAddToCart = (product) => {
     addToCart(product, 1);
-    // toast.success(`${product.productName} added to cart!`);
   };
 
   return (
