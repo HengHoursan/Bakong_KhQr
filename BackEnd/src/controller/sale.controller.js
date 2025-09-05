@@ -62,9 +62,9 @@ exports.createSale = async (req, res) => {
       "BATTAMBANG",
       optionalData
     );
+    //code generate QR
     const khqr = new BakongKHQR();
     const qrData = khqr.generateIndividual(individualInfo);
-    console.log("Generated KHQR:", qrData);
     if (!qrData.data || qrData.status?.code !== 0) {
       return res.status(400).json({
         success: false,

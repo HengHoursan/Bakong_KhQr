@@ -24,24 +24,56 @@ const QRPaymentCard = ({ payment, onClose, onRegenerate, onPaid }) => {
   }, [payment]);
 
   // Check the server every 5 seconds to see if this payment has been completed
+  // useEffect(() => {
+  //   if (!payment.md5 || isPaid) return;
+
+  //   const pollPayment = setInterval(async () => {
+  //     try {
+  //       const result = await checkSalePayment(payment.md5);
+  //       if (result.sale?.payment?.paid) {
+  //         setIsPaid(true);
+  //         toast.success("Payment successful! ✅");
+  //         if (onPaid) onPaid();
+  //         clearInterval(pollPayment);
+  //       }
+  //     } catch (err) {
+  //       console.error("Error checking payment:", err);
+  //     }
+  //   }, 5000);
+
+  //   return () => clearInterval(pollPayment);
+  // }, [payment, isPaid, onPaid]);
+
+  // Poll the server to check if this payment has been completed,
+  // waiting 5 seconds after each request before checking again
   useEffect(() => {
     if (!payment.md5 || isPaid) return;
 
-    const pollPayment = setInterval(async () => {
+    let isCancelled = false;
+
+    const pollPaymentTimeout = async () => {
       try {
         const result = await checkSalePayment(payment.md5);
-        if (result.sale?.payment?.paid) {
-          setIsPaid(true);
-          toast.success("Payment successful! ✅");
-          if (onPaid) onPaid();
-          clearInterval(pollPayment);
+        if (!isCancelled) {
+          if (result.sale?.payment?.paid) {
+            setIsPaid(true);
+            toast.success("Payment successful! ✅");
+            if (onPaid) onPaid();
+          } else {
+            setTimeout(pollPaymentTimeout, 5000); // schedule next check
+          }
         }
       } catch (err) {
         console.error("Error checking payment:", err);
+        if (!isCancelled) setTimeout(pollPaymentTimeout, 5000); // retry after 5s
       }
-    }, 5000);
+    };
 
-    return () => clearInterval(pollPayment);
+    pollPaymentTimeout();
+
+    return () => {
+      isCancelled = true; // stop further polling on unmount
+    };
   }, [payment, isPaid, onPaid]);
 
   // Trigger onPaid immediately if already paid
