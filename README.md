@@ -1,6 +1,6 @@
 # Tech Stack & Packages
 
-This document summarizes the main libraries, frameworks, and packages used in this MERN Staack project.
+This document summarizes the main libraries, frameworks, and packages used in this MERN Stack project.
 
 ---
 
